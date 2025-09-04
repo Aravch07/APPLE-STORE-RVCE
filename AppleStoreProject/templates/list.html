@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>{{ table_name | capitalize }} Collection</h2>
+
+<!-- Product Table -->
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Price (₹)</th>
+      <th>Quantity</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in rows %}
+    <tr>
+      <td>{{ row[0] }}</td>
+      <td>{{ row[1] }}</td>
+      <td>{{ row[2] }}</td>
+      <td>{{ row[3] }}</td>
+      <td>
+        <!-- Add to Cart -->
+        <form method="POST" action="{{ url_for('add_to_cart', table=table_name) }}" style="display:inline;">
+          <input type="hidden" name="id" value="{{ row[0] }}">
+          <button type="submit">Add to Cart</button>
+        </form>
+
+        <!-- Delete Product -->
+        <form method="POST" action="{{ url_for('delete_item', table=table_name) }}" style="display:inline;">
+          <input type="hidden" name="id" value="{{ row[0] }}">
+          <button type="submit">Delete</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<!-- Add New Product -->
+<h3>Add New Product</h3>
+<form method="POST" action="{{ url_for('insert_item', table=table_name) }}">
+  <input type="text" name="name" placeholder="Product Name" required>
+  <input type="number" name="price" placeholder="Price" required>
+  <input type="number" name="quantity" placeholder="Quantity" required>
+  <button type="submit">Add Product</button>
+</form>
+{% endblock %}

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase History - Apple Store RVCE</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <h1>Apple Store RVCE</h1>
+        <div class="nav-links">
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('view_cart') }}">Cart</a>
+            <a href="{{ url_for('purchases') }}">Purchases</a>
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for message in messages %}
+                    <div class="flash-message">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1>Purchase History</h1>
+        <p>Total Spent: ₹{{ "{:,.0f}".format(total_spent) }}</p>
+    </div>
+
+    <!-- Purchase History -->
+    <div class="purchases-container">
+        {% if purchases %}
+        <table class="purchases-table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th>Purchase Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for purchase in purchases %}
+                <tr>
+                    <td class="product-name">{{ purchase[1] }}</td>
+                    <td class="price">₹{{ "{:,.0f}".format(purchase[2]) }}</td>
+                    <td class="quantity">{{ purchase[3] }}</td>
+                    <td class="total">₹{{ "{:,.0f}".format(purchase[4]) }}</td>
+                    <td class="date">{{ purchase[5].strftime('%Y-%m-%d %H:%M') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <!-- No Purchases -->
+        <div class="empty-purchases">
+            <h3>No purchases yet</h3>
+            <p>Start shopping to see your purchase history here!</p>
+            <a href="{{ url_for('index') }}" class="btn-shop">Start Shopping</a>
+        </div>
+        {% endif %}
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

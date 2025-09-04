@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ table_name|title }} - Apple Store RVCE</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <h1>🍎 Apple Store RVCE</h1>
+        <div class="nav-links">
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('view_cart') }}">🛒 Cart</a>
+            <a href="{{ url_for('purchases') }}">📋 Purchases</a>
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for message in messages %}
+                    <div class="flash-message">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1>{{ table_name|title }} Collection</h1>
+        <button onclick="toggleAddForm()" class="btn-add">Add New Product</button>
+    </div>
+
+    <!-- Products Table -->
+    <div class="table-container">
+        {% if products %}
+        <table class="products-table">
+            <thead>
+                <tr>
+                    {% for column in columns %}
+                    <th>{{ column.replace('_', ' ').title() }}</th>
+                    {% endfor %}
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                <tr>
+                    {% for value in product %}
+                    <td>
+                        {% if loop.index == columns|length %}
+                            ₹{{ "{:,.0f}".format(value) }}
+                        {% else %}
+                            {{ value }}
+                        {% endif %}
+                    </td>
+                    {% endfor %}
+                    <td class="actions">
+                        <!-- Add to Cart -->
+                        <form method="POST" action="{{ url_for('add_to_cart', table_name=table_name) }}" class="inline-form">
+                            <input type="hidden" name="product_number" value="{{ product[0] }}">
+                            <input type="number" name="cart_quantity" value="1" min="1" max="{{ product[5] if table_name == 'accessories' else product[6] }}" class="qty-input">
+                            <button type="submit" class="btn-cart">Add to Cart</button>
+                        </form>
+
+                        <!-- Delete Product -->
+                        <form method="POST" action="{{ url_for('delete_product', table_name=table_name) }}" class="inline-form">
+                            <input type="hidden" name="product_number" value="{{ product[0] }}">
+                            <button type="submit" class="btn-delete" onclick="return confirm('Delete this product?')">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty-state">
+            <h3>No products available</h3>
+            <p>Add some products to get started!</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Add Product Form (Hidden by default) -->
+    <div id="addProductForm" class="add-form" style="display: none;">
+        <h3>Add New {{ table_name|title }}</h3>
+        
+        {% if table_name in ['iphone', 'ipad', 'mac'] %}
+        <form method="POST" action="{{ url_for('add_product', table_name=table_name) }}">
+            <input type="text" name="product_name" placeholder="Product Name" required>
+            <input type="text" name="processor" placeholder="Processor" required>
+            <input type="text" name="memory" placeholder="Memory" required>
+            <input type="text" name="storage" placeholder="Storage" required>
+            <input type="number" name="quantity" placeholder="Quantity" required>
+            <input type="number" step="0.01" name="price" placeholder="Price" required>
+            <button type="submit" class="btn-submit">Add Product</button>
+            <button type="button" onclick="toggleAddForm()" class="btn-cancel">Cancel</button>
+        </form>
+        
+        {% elif table_name == 'airpods' %}
+        <form method="POST" action="{{ url_for('add_product', table_name=table_name) }}">
+            <input type="text" name="product_name" placeholder="Product Name" required>
+            <input type="text" name="chipset" placeholder="Chipset" required>
+            <input type="text" name="fit" placeholder="Fit" required>
+            <input type="text" name="battery" placeholder="Battery" required>
+            <input type="number" name="quantity" placeholder="Quantity" required>
+            <input type="number" step="0.01" name="price" placeholder="Price" required>
+            <button type="submit" class="btn-submit">Add Product</button>
+            <button type="button" onclick="toggleAddForm()" class="btn-cancel">Cancel</button>
+        </form>
+        
+        {% elif table_name == 'accessories' %}
+        <form method="POST" action="{{ url_for('add_product', table_name=table_name) }}">
+            <input type="text" name="product_name" placeholder="Product Name" required>
+            <input type="text" name="device" placeholder="Compatible Device" required>
+            <input type="number" name="quantity" placeholder="Quantity" required>
+            <input type="number" step="0.01" name="price" placeholder="Price" required>
+            <button type="submit" class="btn-submit">Add Product</button>
+            <button type="button" onclick="toggleAddForm()" class="btn-cancel">Cancel</button>
+        </form>
+        {% endif %}
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

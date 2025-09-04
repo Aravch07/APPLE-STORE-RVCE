@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search in {{ table }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 30px; }
+        form { display: inline-block; text-align: left; padding: 20px; border: 1px solid #ccc; border-radius: 10px; }
+        label { display: block; margin-top: 10px; }
+        select, input { width: 100%; padding: 5px; }
+        button { margin-top: 15px; padding: 10px 15px; border: none; background: #ff9500; color: white; cursor: pointer; border-radius: 5px; }
+        a { display: block; margin-top: 15px; color: #007aff; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <h2>Search in {{ table }}</h2>
+    <form method="POST">
+        <label>Select Column</label>
+        <select name="column">
+            {% for col in columns %}
+                <option value="{{ col }}">{{ col }}</option>
+            {% endfor %}
+        </select>
+        <label>Enter Value</label>
+        <input type="text" name="value" required>
+        <button type="submit">Search</button>
+    </form>
+    <a href="{{ url_for('show_table', table=table) }}">Back</a>
+</body>
+</html>

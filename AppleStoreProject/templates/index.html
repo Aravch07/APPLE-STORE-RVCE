@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apple Store RVCE</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <h1>🍎 Apple Store RVCE</h1>
+        <div class="nav-links">
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('view_cart') }}">🛒 Cart</a>
+            <a href="{{ url_for('purchases') }}">📋 Purchases</a>
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for message in messages %}
+                    <div class="flash-message">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <h1>Welcome to Apple Store RVCE</h1>
+        <p>Discover the latest Apple products</p>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="products-grid">
+        <!-- First Row - 3 products -->
+        <div class="product-card" onclick="window.location.href='{{ url_for('show_table', table_name='iphone') }}'">
+            <img src="{{ url_for('static', filename='images/iphone.jpg') }}" alt="iPhone" onerror="this.src='https://via.placeholder.com/300x200?text=iPhone'">
+            <h3>iPhone</h3>
+            <p>The most advanced iPhone ever</p>
+        </div>
+
+        <div class="product-card" onclick="window.location.href='{{ url_for('show_table', table_name='ipad') }}'">
+            <img src="{{ url_for('static', filename='images/ipad.jpg') }}" alt="iPad" onerror="this.src='https://via.placeholder.com/300x200?text=iPad'">
+            <h3>iPad</h3>
+            <p>Powerful and versatile</p>
+        </div>
+
+        <div class="product-card" onclick="window.location.href='{{ url_for('show_table', table_name='mac') }}'">
+            <img src="{{ url_for('static', filename='images/mac.jpg') }}" alt="Mac" onerror="this.src='https://via.placeholder.com/300x200?text=Mac'">
+            <h3>Mac</h3>
+            <p>Supercharged performance</p>
+        </div>
+
+        <!-- Second Row - 2 products (staggered) -->
+        <div class="product-card staggered" onclick="window.location.href='{{ url_for('show_table', table_name='airpods') }}'">
+            <img src="{{ url_for('static', filename='images/airpods.jpg') }}" alt="AirPods" onerror="this.src='https://via.placeholder.com/300x200?text=AirPods'">
+            <h3>AirPods</h3>
+            <p>Wireless audio magic</p>
+        </div>
+
+        <div class="product-card staggered" onclick="window.location.href='{{ url_for('show_table', table_name='accessories') }}'">
+            <img src="{{ url_for('static', filename='images/accessories.jpg') }}" alt="Accessories" onerror="this.src='https://via.placeholder.com/300x200?text=Accessories'">
+            <h3>Accessories</h3>
+            <p>Perfect companions</p>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <div class="about">
+        <h2>About Apple</h2>
+        <p>
+            Apple is a global leader in technology and innovation, creating products like 
+            the iPhone, iPad, Mac, AirPods, and a wide range of accessories. 
+            At Apple Store RVCE, you can explore, shop, and experience the future of technology.
+        </p>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Apple Store RVCE.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
